@@ -2,7 +2,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
 SRCS_DIR = srcs
-SRCS = $(addprefix $(SRCS_DIR)/, main.c ) # to be updated
+SRCS = $(addprefix $(SRCS_DIR)/, main.c parse.c utils.c) # to be updated
 
 OBJS_DIR = objs
 OBJS = $(addprefix $(OBJS_DIR)/, $(notdir $(SRCS:.c=.o)))
@@ -30,11 +30,11 @@ $(NAME): $(OBJS) $(LIBFT) $(LIBMLX42)
 $(LIBFT):
 	make -C $(LIBFT_DIR)
 
-$(LIBMLX42):
+$(LIBMLX42): $(LIBMLX42_DIR)
 	git submodule update --init $(LIBMLX42_DIR)
 	cmake $(LIBMLX42_DIR) -B $(LIBMLX42_DIR)/build && make -C $(LIBMLX42_DIR)/build -j4
 
-$(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c | $(OBJS_DIR)
+$(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c $(LIBMLX42) | $(OBJS_DIR)
 	$(CC) $(CFLAGS) $(HEADERS) -c $< -o $@
 
 $(OBJS_DIR):

@@ -1,25 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/04 18:38:01 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/04 18:40:42 by anaqvi           ###   ########.fr       */
+/*   Created: 2024/12/04 18:37:58 by anaqvi            #+#    #+#             */
+/*   Updated: 2024/12/04 19:28:17 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-int main(int argc, char **argv)
+t_3d_map	parse_input_file(int argc, char **argv)
 {
-	t_3d_map	map_3d;
-	t_2d_map	map_2d;
+	int	fd;
 
-	map_3d = parse_input_file(argc, argv); // parses the .fdf files and saves the 3D points
-	map_2d = transform_map_to_2d(map_3d);
-	draw_map(map_2d);
-	free_splits(&map_2d.points);
-	return (EXIT_SUCCESS);
+	if (argc != 2)
+	{
+		ft_putendl_fd("Usage: ./fdf <path to .fdf file>", STDERR_FILENO);
+		exit(EXIT_FAILURE);
+	}
+	fd = open(argv[1], O_RDONLY);
+	if (fd == -1)
+	{
+		perror(argv[1]);
+		exit(EXIT_FAILURE);
+	}
+	// 
+	close(fd);
 }

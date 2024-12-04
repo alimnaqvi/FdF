@@ -1,25 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/04 18:38:01 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/04 18:40:42 by anaqvi           ###   ########.fr       */
+/*   Created: 2024/12/04 18:36:04 by anaqvi            #+#    #+#             */
+/*   Updated: 2024/12/04 18:36:21 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-int main(int argc, char **argv)
+void	free_splits(char ***splits)
 {
-	t_3d_map	map_3d;
-	t_2d_map	map_2d;
+	int	i;
 
-	map_3d = parse_input_file(argc, argv); // parses the .fdf files and saves the 3D points
-	map_2d = transform_map_to_2d(map_3d);
-	draw_map(map_2d);
-	free_splits(&map_2d.points);
-	return (EXIT_SUCCESS);
+	if (!splits || !*splits)
+		return ;
+	i = 0;
+	while ((*splits)[i])
+	{
+		free((*splits)[i]);
+		i++;
+	}
+	free(*splits);
+	*splits = NULL;
 }
