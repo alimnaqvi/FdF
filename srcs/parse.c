@@ -6,7 +6,7 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 18:37:58 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/05 18:15:11 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/05 19:00:18 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,19 @@ static int	open_file(int argc, char **argv)
 	return (fd);
 }
 
-static uint32_t get_number_of_lines(int fd)
+static uint32_t get_number_of_lines(char *file, t_list **allocs)
 {
+	int fd;
 	uint32_t i;
 	char *line;
 	
 	i = 0;
+	fd = open(file, O_RDONLY);
+	if (fd == -1)
+	{
+		perror(file);
+		ft_exit(allocs, EXIT_FAILURE);
+	}
 	line = get_next_line(fd);
 	while(line)
 	{
@@ -43,6 +50,7 @@ static uint32_t get_number_of_lines(int fd)
 		free(line);
 		line = get_next_line(fd);
 	}
+	close(fd);
 	return (i);
 }
 
@@ -57,7 +65,7 @@ t_3d_map	*init_parse_file(int argc, char **argv, t_list **allocs)
 
 	fd = open_file(argc, argv);
 	map = ft_malloc(sizeof(t_3d_map), allocs);
-	map->height = get_number_of_lines(fd);
+	map->height = get_number_of_lines(argv[1], allocs);
 	map->points = ft_malloc(sizeof(t_3d_point *) * map->height, allocs);
 	y = 0;
 	line = get_next_line(fd);
@@ -71,11 +79,9 @@ t_3d_map	*init_parse_file(int argc, char **argv, t_list **allocs)
 		x = 0;
 		while (*in_points)
 		{
-			// ft_printf("row %u column %u: ", y, x);
 			map->points[y][x].x = x;
 			map->points[y][x].y = y;
 			map->points[y][x].z = ft_atoi(*in_points);
-			// ft_printf("value of z is: %u\n", map->points[y][x].z);
 			// map->points[y][x].color = get_color(*in_points);
 			in_points++;
 			x++;

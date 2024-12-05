@@ -1,5 +1,6 @@
 CC = cc
-#CFLAGS = -Wall -Wextra -Werror
+# CFLAGS = -g#temp
+CFLAGS = -Wall -Wextra -Werror
 
 SRCS_DIR = srcs
 SRCS = $(addprefix $(SRCS_DIR)/, main.c parse.c memory.c split.c utils.c) # to be updated
