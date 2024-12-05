@@ -1,9 +1,13 @@
 a.out*
+*.out
 fdf
 *.o
-*/.o
+*.obj
+*/*.o
 *.a
 */*.a
 .vscode
 .DS_Store
+*.dylib
+*.dSYM/
 test*

@@ -1,8 +1,8 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+#CFLAGS = -Wall -Wextra -Werror
 
 SRCS_DIR = srcs
-SRCS = $(addprefix $(SRCS_DIR)/, main.c parse.c utils.c) # to be updated
+SRCS = $(addprefix $(SRCS_DIR)/, main.c parse.c memory.c split.c utils.c) # to be updated
 
 OBJS_DIR = objs
 OBJS = $(addprefix $(OBJS_DIR)/, $(notdir $(SRCS:.c=.o)))

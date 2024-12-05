@@ -6,20 +6,40 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 18:38:01 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/04 18:40:42 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/05 18:13:50 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
+// static void test_print_map(t_3d_map map_3d)
+// {
+// 	int i = 0;
+// 	int j;
+
+// 	while (i < map_3d.height)
+// 	{
+// 		j = 0;
+// 		while (j < map_3d.width)
+// 		{
+// 			ft_printf("(%u, %u, %u) ", map_3d.points[i][j].x, map_3d.points[i][j].y, map_3d.points[i][j].z);
+// 			j++;
+// 		}
+// 		ft_printf("\n");
+// 		i++;
+// 	}
+// }
+
 int main(int argc, char **argv)
 {
-	t_3d_map	map_3d;
+	t_list *allocs;
+	t_3d_map	*map_3d;
 	t_2d_map	map_2d;
 
-	map_3d = parse_input_file(argc, argv); // parses the .fdf files and saves the 3D points
-	map_2d = transform_map_to_2d(map_3d);
-	draw_map(map_2d);
-	free_splits(&map_2d.points);
-	return (EXIT_SUCCESS);
+	allocs = NULL;
+	map_3d = init_parse_file(argc, argv, &allocs); // parses the .fdf files and saves the 3D points
+	// map_2d = transform_map_to_2d(map_3d);
+	// draw_map(map_2d);
+	// test_print_map(*map_3d);
+	ft_exit(&allocs, EXIT_SUCCESS);
 }
