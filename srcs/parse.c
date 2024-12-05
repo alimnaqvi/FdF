@@ -6,7 +6,7 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 18:37:58 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/05 19:00:18 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/05 22:53:21 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,53 @@ static uint32_t get_number_of_lines(char *file, t_list **allocs)
 	return (i);
 }
 
+static uint32_t	ft_atoi_color(char *str)
+{
+	uint32_t	color;
+	int			i;
+	char		c;
+
+	if (!str || str[0] != '0' || str[1] != 'x')
+		return (0x000000FF);
+	color = 0;
+	i = 2;
+	while (str[i])
+	{
+		c = str[i];
+		if (c >= '0' && c <= '9')
+			c = c - '0';
+		else if (c >= 'a' && c <= 'f')
+			c = c - 'a' + 10;
+		else if (c >= 'A' && c <= 'F')
+			c = c - 'A' + 10;
+		else
+			return (0x000000FF);
+		color = (color << 4) | c;
+		i++;
+	}
+	if (i == 2)
+		return (0x000000FF);
+	return ((color << 8) | 0xFF);
+}
+
+static uint32_t	get_color(char *str, t_list **allocs)
+{
+	char **splits;
+
+	if (!ft_strchr(str, ','))
+		return (0xFFFFFFFF);
+	splits = ft_split_ft_malloc(str, ',', allocs);
+	if (splits && splits[1])
+		return(ft_atoi_color(splits[1]));
+	return(0xFFFFFFFF);
+}
+
 t_3d_map	*init_parse_file(int argc, char **argv, t_list **allocs)
 {
 	int	fd;
 	uint32_t	x;
 	uint32_t y;
+	uint32_t cur_width;
 	char *line;
 	char **in_points;
 	t_3d_map *map;
@@ -71,10 +113,16 @@ t_3d_map	*init_parse_file(int argc, char **argv, t_list **allocs)
 	line = get_next_line(fd);
 	while (line)
 	{
-		in_points = ft_split_ft_malloc(line, ' ', allocs);
-		map->width = 0;
-		while (in_points[map->width])
-			(map->width)++;
+		in_points = ft_split_ft_malloc(ft_strtrim(line, "\n"), ' ', allocs);
+		cur_width = 0;
+		while (in_points[cur_width])
+			(cur_width)++;
+		if (y != 0 && cur_width != map->width)
+		{
+			ft_putendl_fd("Invalid map. Ensure uniform width.", STDERR_FILENO);
+			ft_exit(allocs, EXIT_FAILURE);
+		}
+		map->width = cur_width;
 		map->points[y] = ft_malloc(sizeof(t_3d_point) * map->width, allocs);
 		x = 0;
 		while (*in_points)
@@ -82,7 +130,7 @@ t_3d_map	*init_parse_file(int argc, char **argv, t_list **allocs)
 			map->points[y][x].x = x;
 			map->points[y][x].y = y;
 			map->points[y][x].z = ft_atoi(*in_points);
-			// map->points[y][x].color = get_color(*in_points);
+			map->points[y][x].color = get_color(*in_points, allocs);
 			in_points++;
 			x++;
 		}
@@ -90,7 +138,6 @@ t_3d_map	*init_parse_file(int argc, char **argv, t_list **allocs)
 		line = get_next_line(fd);
 		y++;
 	}
-	// check if width is constant
 	close(fd);
 	return (map);
 }

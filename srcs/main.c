@@ -6,7 +6,7 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 18:38:01 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/05 18:59:21 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/05 22:42:27 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int main(int argc, char **argv)
 
 	allocs = NULL;
 	map_3d = init_parse_file(argc, argv, &allocs); // parses the .fdf files and saves the 3D points
+	ft_printf("%u\n", map_3d->width);
 	// map_2d = transform_map_to_2d(map_3d);
 	// draw_map(map_2d);
 	// test_print_map(*map_3d);
