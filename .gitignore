@@ -11,3 +11,5 @@ fdf
 *.dylib
 *.dSYM/
 test*
+tools
+build/

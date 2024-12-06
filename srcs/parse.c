@@ -6,7 +6,7 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 18:37:58 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/05 22:53:21 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/06 11:42:43 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ static uint32_t	get_color(char *str, t_list **allocs)
 
 	if (!ft_strchr(str, ','))
 		return (0xFFFFFFFF);
-	splits = ft_split_ft_malloc(str, ',', allocs);
+	splits = ft_split_safe(str, ',', allocs);
 	if (splits && splits[1])
 		return(ft_atoi_color(splits[1]));
 	return(0xFFFFFFFF);
@@ -113,13 +113,14 @@ t_3d_map	*init_parse_file(int argc, char **argv, t_list **allocs)
 	line = get_next_line(fd);
 	while (line)
 	{
-		in_points = ft_split_ft_malloc(ft_strtrim(line, "\n"), ' ', allocs);
+		in_points = ft_split_safe(ft_strtrim_safe(line, "\n", allocs), ' ', allocs);
 		cur_width = 0;
 		while (in_points[cur_width])
 			(cur_width)++;
 		if (y != 0 && cur_width != map->width)
 		{
 			ft_putendl_fd("Invalid map. Ensure uniform width.", STDERR_FILENO);
+			close(fd);
 			ft_exit(allocs, EXIT_FAILURE);
 		}
 		map->width = cur_width;

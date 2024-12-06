@@ -6,7 +6,7 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 16:51:56 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/05 16:54:25 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/06 10:29:40 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static char	**free_result(char **result, size_t i)
 	return (NULL);
 }
 
-char	**ft_split_ft_malloc(char const *s, char c, t_list **allocs)
+char	**ft_split_safe(char const *s, char c, t_list **allocs)
 {
 	char	**result;
 	size_t	word_count;
