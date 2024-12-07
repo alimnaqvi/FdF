@@ -6,7 +6,7 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:04:17 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/06 19:54:16 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/07 18:49:18 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,13 @@
 # define HEIGHT 	720
 # define PI		3.14159
 
+typedef struct s_offsets
+{
+	float scale;
+	float x_offset;
+	float y_offset;
+} t_offsets;
+
 // Represents a point in 3-dimensional space
 typedef struct s_3d_point {
     int x;  // x-coordinate
@@ -35,9 +42,12 @@ typedef struct s_3d_point {
 
 // Store all points in a 2-dimensional array (each inside array is one horizontal line of points)
 typedef struct s_3d_map {
-    t_3d_point **points;  // 2D array of points
-    uint32_t width;         // Number of columns (x-coordinates)
-    uint32_t height;        // Number of rows (y-coordinates)
+    t_3d_point 	**points;  // 2D array of points
+    uint32_t 	width;         // Number of columns (x-coordinates)
+    uint32_t 	height;        // Number of rows (y-coordinates)
+	t_offsets	offsets;
+	float		angle;
+	float		scale_z;
 } t_3d_map;
 
 typedef struct s_2d_point {
