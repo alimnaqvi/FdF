@@ -6,7 +6,7 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:04:17 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/07 18:49:18 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/07 21:30:15 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,32 +23,7 @@
 
 # define WIDTH 		1280
 # define HEIGHT 	720
-# define PI		3.14159
-
-typedef struct s_offsets
-{
-	float scale;
-	float x_offset;
-	float y_offset;
-} t_offsets;
-
-// Represents a point in 3-dimensional space
-typedef struct s_3d_point {
-    int x;  // x-coordinate
-    int y;  // y-coordinate
-    int z;  // altitude (z-coordinate)
-	uint32_t color;
-} t_3d_point;
-
-// Store all points in a 2-dimensional array (each inside array is one horizontal line of points)
-typedef struct s_3d_map {
-    t_3d_point 	**points;  // 2D array of points
-    uint32_t 	width;         // Number of columns (x-coordinates)
-    uint32_t 	height;        // Number of rows (y-coordinates)
-	t_offsets	offsets;
-	float		angle;
-	float		scale_z;
-} t_3d_map;
+# define PI		3.14159f
 
 typedef struct s_2d_point {
     int x;
@@ -56,26 +31,38 @@ typedef struct s_2d_point {
 	uint32_t color;
 } t_2d_point;
 
-typedef struct s_2d_map {
-    t_2d_point **points;  // 2D array of points
-    uint32_t width;         // Number of columns (x-coordinates)
-    uint32_t height;        // Number of rows (y-coordinates)
-	int angle;
-	int scale_z;
-} t_2d_map;
+typedef struct s_3d_point {
+    int x;
+    int y;
+    int z;
+	uint32_t color;
+} t_3d_point;
+
+// Store all points in a 2-dimensional array (each inside array is one horizontal line of points)
+typedef struct s_map {
+    t_3d_point 	**points;
+    uint32_t 	width;
+    uint32_t 	height;
+	float		zoom;
+	float		x_offset;
+	float		y_offset;
+	float		angle_x;
+	float		angle_y;
+	float		scale_z;
+} t_map;
 
 typedef struct s_main {
 	mlx_t		*mlx;
 	mlx_image_t	*img;
-	t_3d_map	*map;
+	t_map	*map;
 	t_list		**allocs;
 } t_main;
 
 // parse
-t_3d_map	*init_parse_file(int argc, char **argv, t_list **allocs);
+t_map	*init_parse_file(int argc, char **argv, t_list **allocs);
 
 // render
-void	rendering(t_3d_map *map, t_list **allocs);
+void	rendering(t_map *map, t_list **allocs);
 
 // draw
 void	draw_map(t_main *main);

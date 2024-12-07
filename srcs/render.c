@@ -6,7 +6,7 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 10:41:44 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/07 20:05:44 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/07 21:30:15 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,24 +35,23 @@ static void	ft_init_mlx(t_main *main)
 	}
 }
 
-static void set_map_defaults(t_3d_map *map)
+static void set_map_defaults(t_map *map)
 {
-	t_offsets offsets;
 	uint32_t max_dimension;
 
 	// Determine the maximum dimension of the map
 	max_dimension = map->width > map->height ? map->width : map->height;
 
 	// Compute scale to fit the map within the screen
-	offsets.scale = (WIDTH / 2) / (float)max_dimension;
+	map->zoom = (WIDTH / 2) / (float)max_dimension;
 
 	// Center the map on the screen
-	offsets.x_offset = WIDTH * 0.4;
-	offsets.y_offset = HEIGHT * 0.28;
+	map->x_offset = WIDTH * 0.4;
+	map->y_offset = HEIGHT * 0.28;
 
-	map->offsets = offsets;
-	map->angle = PI / 6;
-	map->scale_z = 0.5;
+	map->angle_y = PI / -30;
+	map->angle_x = PI / 30;
+	map->scale_z = 0.2;
 }
 
 static void reset_draw_new(t_main *main, char *var, char axis, float value)
@@ -62,19 +61,26 @@ static void reset_draw_new(t_main *main, char *var, char axis, float value)
 	if (var == 'o')
 	{
 		if (axis == 'x')
-			main->map->offsets.x_offset += value;
+			main->map->x_offset += value;
 		else if (axis == 'y')
-			main->map->offsets.y_offset += value;
+			main->map->y_offset += value;
 	}
 	else if (var == 's')
-		main->map->offsets.scale += value;
+		main->map->zoom += value;
 	else if (var == 'a')
 	{
-		main->map->angle += value;
+		if (axis == 'x')
+			main->map->angle_x += value;
+		else if (axis == 'y')
+			main->map->angle_y += value;
 	}
+	else if (var == 'z')
+		main->map->scale_z += value;
+	// printf("map->angle_x is now: %.2f\n", PI / (main->map->angle_x));
+	// printf("map->angle_y is now: %.2f\n", PI / (main->map->angle_y));
 	to_delete = main->img;
-	main->img = mlx_new_image(main->mlx, WIDTH, HEIGHT);
-	mlx_image_to_window(main->mlx, main->img, 0, 0);
+	main->img = mlx_new_image(main->mlx, WIDTH, HEIGHT); // need to check for error
+	mlx_image_to_window(main->mlx, main->img, 0, 0); // need to check for error
 	draw_map(main);
 	mlx_delete_image(main->mlx, to_delete);
 }
@@ -85,18 +91,26 @@ static void ft_hook(void* param)
 
 	if (mlx_is_key_down(main->mlx, MLX_KEY_ESCAPE))
 		mlx_close_window(main->mlx);
-	if (mlx_is_key_down(main->mlx, MLX_KEY_UP))
+	else if (mlx_is_key_down(main->mlx, MLX_KEY_LEFT_CONTROL) && mlx_is_key_down(main->mlx, MLX_KEY_UP))
+		reset_draw_new(main, 'z', 'z', 0.01);
+	else if (mlx_is_key_down(main->mlx, MLX_KEY_LEFT_CONTROL) && mlx_is_key_down(main->mlx, MLX_KEY_DOWN))
+		reset_draw_new(main, 'z', 'z', -0.01);
+	else if (mlx_is_key_down(main->mlx, MLX_KEY_UP))
 		reset_draw_new(main, 'o', 'y', -2);
-	if (mlx_is_key_down(main->mlx, MLX_KEY_DOWN))
+	else if (mlx_is_key_down(main->mlx, MLX_KEY_DOWN))
 		reset_draw_new(main, 'o', 'y', 2);
-	if (mlx_is_key_down(main->mlx, MLX_KEY_LEFT))
+	else if (mlx_is_key_down(main->mlx, MLX_KEY_LEFT))
 		reset_draw_new(main, 'o', 'x', -2);
-	if (mlx_is_key_down(main->mlx, MLX_KEY_RIGHT))
+	else if (mlx_is_key_down(main->mlx, MLX_KEY_RIGHT))
 		reset_draw_new(main, 'o', 'x', 2);
-	if (mlx_is_key_down(main->mlx, MLX_KEY_A))
-		reset_draw_new(main, 'a', 'x', -0.01);
-	if (mlx_is_key_down(main->mlx, MLX_KEY_D))
-		reset_draw_new(main, 'a', 'x', 0.01);
+	else if (mlx_is_key_down(main->mlx, MLX_KEY_W))
+		reset_draw_new(main, 'a', 'y', -0.005);
+	else if (mlx_is_key_down(main->mlx, MLX_KEY_S))
+		reset_draw_new(main, 'a', 'y', 0.005);
+	else if (mlx_is_key_down(main->mlx, MLX_KEY_A))
+		reset_draw_new(main, 'a', 'x', -0.005);
+	else if (mlx_is_key_down(main->mlx, MLX_KEY_D))
+		reset_draw_new(main, 'a', 'x', 0.005);
 }
 
 static void zoom(double xdelta, double ydelta, void* param)
@@ -109,7 +123,7 @@ static void zoom(double xdelta, double ydelta, void* param)
 		reset_draw_new(main, 's', 'y', -2);
 }
 
-void	rendering(t_3d_map *map, t_list **allocs)
+void	rendering(t_map *map, t_list **allocs)
 {
 	t_main		main;
 

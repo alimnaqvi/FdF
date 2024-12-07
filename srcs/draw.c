@@ -6,24 +6,34 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 18:51:53 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/07 18:50:56 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/07 21:30:15 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-static t_2d_point isometric_projection(t_3d_point point, float angle, float scale_z, t_offsets offsets)
+static t_2d_point isometric_projection(t_3d_point point, t_map *map)
 {
 	t_2d_point projected;
+	float temp_x, temp_y, temp_z;
 
-	// Apply isometric transformation
-	projected.x = (point.x - point.y) * cos(angle) * offsets.scale;
-	projected.y = ((point.x + point.y) * sin(angle) - point.z * scale_z) * offsets.scale;
+	// Step 1: Rotate the point around the x-axis (affects y and z)
+	temp_y = point.y * cos(map->angle_x) - point.z * sin(map->angle_x);
+	temp_z = point.y * sin(map->angle_x) + point.z * cos(map->angle_x);
+
+	// Step 2: Rotate the point around the y-axis (affects x and z)
+	temp_x = point.x * cos(map->angle_y) + temp_z * sin(map->angle_y);
+	temp_z = -point.x * sin(map->angle_y) + temp_z * cos(map->angle_y);
+
+	// Step 3: Apply isometric projection
+	projected.x = (temp_x - temp_y) * cos(PI / 6) * map->zoom;
+	projected.y = ((temp_x + temp_y) * sin(PI / 6) - temp_z * map->scale_z) * map->zoom;
 
 	// Center it on the window
-	projected.x += offsets.x_offset;
-	projected.y += offsets.y_offset;
+	projected.x += map->x_offset;
+	projected.y += map->y_offset;
 
+	// Preserve the color
 	projected.color = point.color;
 
 	return (projected);
@@ -76,7 +86,6 @@ static void draw_line(t_main *main, t_2d_point start, t_2d_point end)
 		// Draw the pixel if within bounds
 		if (start.x >= 0 && start.y >= 0 && start.x < WIDTH && start.y < HEIGHT)
 			mlx_put_pixel(main->img, (int)start.x, (int)start.y, color);
-
 		// Update Bresenham's error terms
 		e2 = 2 * err;
 		if (e2 > -dy)
@@ -113,13 +122,13 @@ void draw_map(t_main *main)
 			// Draw horizontal lines
 			if (x + 1 < main->map->width)
 				draw_line(main, 
-					isometric_projection(main->map->points[y][x], main->map->angle, main->map->scale_z, main->map->offsets),
-					isometric_projection(main->map->points[y][x + 1], main->map->angle, main->map->scale_z, main->map->offsets));
+					isometric_projection(main->map->points[y][x], main->map),
+					isometric_projection(main->map->points[y][x + 1], main->map));
 			// Draw vertical lines
 			if (y + 1 < main->map->height)
 				draw_line(main, 
-					isometric_projection(main->map->points[y][x], main->map->angle, main->map->scale_z, main->map->offsets),
-					isometric_projection(main->map->points[y + 1][x], main->map->angle, main->map->scale_z, main->map->offsets));
+					isometric_projection(main->map->points[y][x], main->map),
+					isometric_projection(main->map->points[y + 1][x], main->map));
 			x++;
 		}
 		y++;

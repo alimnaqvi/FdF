@@ -6,7 +6,7 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 18:37:58 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/07 16:17:46 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/07 21:30:15 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ static uint32_t	get_color(char *str, t_list **allocs)
 	return(0xFFFFFFFF);
 }
 
-t_3d_map	*init_parse_file(int argc, char **argv, t_list **allocs)
+t_map	*init_parse_file(int argc, char **argv, t_list **allocs)
 {
 	int	fd;
 	uint32_t	x;
@@ -103,10 +103,10 @@ t_3d_map	*init_parse_file(int argc, char **argv, t_list **allocs)
 	uint32_t cur_width;
 	char *line;
 	char **in_points;
-	t_3d_map *map;
+	t_map *map;
 
 	fd = open_file(argc, argv);
-	map = ft_malloc(sizeof(t_3d_map), allocs);
+	map = ft_malloc(sizeof(t_map), allocs);
 	map->height = get_number_of_lines(argv[1], allocs);
 	map->points = ft_malloc(sizeof(t_3d_point *) * map->height, allocs);
 	y = 0;
