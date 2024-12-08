@@ -6,7 +6,7 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 18:51:53 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/07 21:30:15 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/08 21:35:59 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,70 +42,50 @@ static t_2d_point isometric_projection(t_3d_point point, t_map *map)
 // Interpolates between start_color and end_color based on "percentage" (0.0 to 1.0)
 static uint32_t interpolate_color(uint32_t start_color, uint32_t end_color, float percentage)
 {
-	// Extract RGBA components from the start and end colors
-	uint8_t sr = (start_color >> 24) & 0xFF; // Red component of start color
-	uint8_t sg = (start_color >> 16) & 0xFF; // Green component of start color
-	uint8_t sb = (start_color >> 8) & 0xFF;  // Blue component of start color
-	uint8_t sa = start_color & 0xFF;         // Alpha component of start color
+	t_color start;
+	t_color end;
+	t_color result;
 
-	uint8_t er = (end_color >> 24) & 0xFF;   // Red component of end color
-	uint8_t eg = (end_color >> 16) & 0xFF;   // Green component of end color
-	uint8_t eb = (end_color >> 8) & 0xFF;    // Blue component of end color
-	uint8_t ea = end_color & 0xFF;           // Alpha component of end color
+	start.red = (start_color >> 24) & 0xFF;
+	start.green = (start_color >> 16) & 0xFF;
+	start.blue = (start_color >> 8) & 0xFF;
+	start.alpha = start_color & 0xFF;
+	end.red = (end_color >> 24) & 0xFF;
+	end.green = (end_color >> 16) & 0xFF;
+	end.blue = (end_color >> 8) & 0xFF;
+	end.alpha = end_color & 0xFF;
+	result.red = start.red + percentage * (end.red - start.red);
+	result.green = start.green + percentage * (end.green - start.green);
+	result.blue = start.blue + percentage * (end.blue - start.blue);
+	result.alpha = start.alpha + percentage * (end.alpha - start.alpha);
 
-	// Interpolate each component
-	uint8_t r = sr + percentage * (er - sr);
-	uint8_t g = sg + percentage * (eg - sg);
-	uint8_t b = sb + percentage * (eb - sb);
-	uint8_t a = sa + percentage * (ea - sa);
-
-	// Combine the interpolated RGBA components back into a single integer
-	return ((r << 24) | (g << 16) | (b << 8) | a);
+	return ((result.red << 24) | (result.green << 16) | (result.blue << 8) | result.alpha);
 }
 
 static void draw_line(t_main *main, t_2d_point start, t_2d_point end)
 {
-	int dx = abs((int)end.x - (int)start.x);
-	int dy = abs((int)end.y - (int)start.y);
-	int sx = (start.x < end.x) ? 1 : -1;
-	int sy = (start.y < end.y) ? 1 : -1;
-	int err = dx - dy;
-	int e2;
-	int steps = dx > dy ? dx : dy;  // Find the total number of steps (longer axis)
-	int current_step = 0;
+	t_dda dda;
 
-	// Ensure the line stays within bounds while drawing
-	while ((int)start.x != (int)end.x || (int)start.y != (int)end.y)
+	dda.dx = end.x - start.x;
+	dda.dy = end.y - start.y;
+	if (abs(dda.dx) > abs(dda.dy))
+		dda.steps = abs(dda.dx);
+	else
+		dda.steps = abs(dda.dy);
+	dda.x_inc = dda.dx / dda.steps;
+	dda.y_inc = dda.dy / dda.steps;
+	dda.current_x = start.x;
+	dda.current_y = start.y;
+	dda.i = 0;
+	while (dda.i <= dda.steps)
 	{
-		// Calculate the percentage of completion along the line
-		float percentage = (float)current_step / (float)steps;
-
-		// Interpolate color based on percentage
-		uint32_t color = interpolate_color(start.color, end.color, percentage);
-
-		// Draw the pixel if within bounds
-		if (start.x >= 0 && start.y >= 0 && start.x < WIDTH && start.y < HEIGHT)
-			mlx_put_pixel(main->img, (int)start.x, (int)start.y, color);
-		// Update Bresenham's error terms
-		e2 = 2 * err;
-		if (e2 > -dy)
-		{
-			err -= dy;
-			start.x += sx;
-		}
-		if (e2 < dx)
-		{
-			err += dx;
-			start.y += sy;
-		}
-
-		// Increment the step counter
-		current_step++;
+		dda.percentage = (float)dda.i++ / (float)dda.steps;
+		dda.color = interpolate_color(start.color, end.color, dda.percentage);
+		if (dda.current_x >= 0 && dda.current_y >= 0 && dda.current_x < WIDTH && dda.current_y < HEIGHT)
+			mlx_put_pixel(main->img, (int)dda.current_x, (int)dda.current_y, dda.color);
+		dda.current_x += dda.x_inc;
+		dda.current_y += dda.y_inc;
 	}
-
-	// Draw the last pixel (with the end color)
-	if (end.x >= 0 && end.y >= 0 && end.x < WIDTH && end.y < HEIGHT)
-		mlx_put_pixel(main->img, (int)end.x, (int)end.y, end.color);
 }
 
 void draw_map(t_main *main)

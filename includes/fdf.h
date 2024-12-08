@@ -6,7 +6,7 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:04:17 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/07 21:30:15 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/08 21:29:25 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,26 @@ typedef struct s_main {
 	t_map	*map;
 	t_list		**allocs;
 } t_main;
+
+typedef struct s_dda {
+	float dx;
+	float dy;
+	int steps;
+	float x_inc;
+	float y_inc;
+	float current_x;
+	float current_y;
+	int i;
+	float percentage;
+	uint32_t color;
+} t_dda;
+
+typedef struct s_color {
+	uint8_t red;
+	uint8_t green;
+	uint8_t blue;
+	uint8_t alpha;
+} t_color;
 
 // parse
 t_map	*init_parse_file(int argc, char **argv, t_list **allocs);
