@@ -6,7 +6,7 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:04:17 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/08 21:29:25 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/09 12:05:30 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,20 @@
 # define WIDTH 		1280
 # define HEIGHT 	720
 # define PI		3.14159f
+
+typedef enum e_projection_type {
+       ISOMETRIC,
+       SIDE_VIEW,  // Similar to isometric but with unequal angles
+       TOP_DOWN,  // Parallel projection: looking straight down
+   } t_proj_type;
+
+typedef enum e_feature {
+       OFFSET,
+	   ANGLE,
+	   ZOOM,
+       SCALE_Z,
+	   PROJ_TYPE,
+   } t_feature;
 
 typedef struct s_2d_point {
     int x;
@@ -48,7 +62,9 @@ typedef struct s_map {
 	float		y_offset;
 	float		angle_x;
 	float		angle_y;
+	float		angle_z;
 	float		scale_z;
+	t_proj_type	proj_type;
 } t_map;
 
 typedef struct s_main {

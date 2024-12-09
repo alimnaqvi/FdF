@@ -6,36 +6,39 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 18:51:53 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/08 21:35:59 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/09 12:22:31 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-static t_2d_point isometric_projection(t_3d_point point, t_map *map)
+static t_2d_point project_point(t_3d_point point, t_map *map)
 {
 	t_2d_point projected;
 	float temp_x, temp_y, temp_z;
 
-	// Step 1: Rotate the point around the x-axis (affects y and z)
 	temp_y = point.y * cos(map->angle_x) - point.z * sin(map->angle_x);
 	temp_z = point.y * sin(map->angle_x) + point.z * cos(map->angle_x);
-
-	// Step 2: Rotate the point around the y-axis (affects x and z)
 	temp_x = point.x * cos(map->angle_y) + temp_z * sin(map->angle_y);
 	temp_z = -point.x * sin(map->angle_y) + temp_z * cos(map->angle_y);
-
-	// Step 3: Apply isometric projection
-	projected.x = (temp_x - temp_y) * cos(PI / 6) * map->zoom;
-	projected.y = ((temp_x + temp_y) * sin(PI / 6) - temp_z * map->scale_z) * map->zoom;
-
-	// Center it on the window
+	if (map->proj_type == ISOMETRIC)
+	{
+		projected.x = (temp_x - temp_y) * cos(map->angle_z) * map->zoom;
+		projected.y = ((temp_x + temp_y) * sin(map->angle_z) - temp_z * map->scale_z) * map->zoom;
+	}
+	else if (map->proj_type == SIDE_VIEW)
+	{
+		projected.x = (temp_x - temp_y) * cos(map->angle_z) * map->zoom;
+		projected.y = ((temp_x + temp_y) * sin(map->angle_z) - temp_z * map->scale_z) * map->zoom;
+	}
+	else if (map->proj_type == TOP_DOWN)
+	{
+		projected.x = temp_x * map->zoom;
+		projected.y = temp_y * map->zoom;
+	}
 	projected.x += map->x_offset;
 	projected.y += map->y_offset;
-
-	// Preserve the color
 	projected.color = point.color;
-
 	return (projected);
 }
 
@@ -58,7 +61,6 @@ static uint32_t interpolate_color(uint32_t start_color, uint32_t end_color, floa
 	result.green = start.green + percentage * (end.green - start.green);
 	result.blue = start.blue + percentage * (end.blue - start.blue);
 	result.alpha = start.alpha + percentage * (end.alpha - start.alpha);
-
 	return ((result.red << 24) | (result.green << 16) | (result.blue << 8) | result.alpha);
 }
 
@@ -99,16 +101,14 @@ void draw_map(t_main *main)
 		x = 0;
 		while (x < main->map->width)
 		{
-			// Draw horizontal lines
 			if (x + 1 < main->map->width)
 				draw_line(main, 
-					isometric_projection(main->map->points[y][x], main->map),
-					isometric_projection(main->map->points[y][x + 1], main->map));
-			// Draw vertical lines
+					project_point(main->map->points[y][x], main->map),
+					project_point(main->map->points[y][x + 1], main->map));
 			if (y + 1 < main->map->height)
 				draw_line(main, 
-					isometric_projection(main->map->points[y][x], main->map),
-					isometric_projection(main->map->points[y + 1][x], main->map));
+					project_point(main->map->points[y][x], main->map),
+					project_point(main->map->points[y + 1][x], main->map));
 			x++;
 		}
 		y++;
