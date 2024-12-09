@@ -1,9 +1,9 @@
 CC = cc
-# CFLAGS = -g# -fsanitize=address#temp
+# CFLAGS = -g# -fsanitize=address
 CFLAGS = -Wall -Wextra -Werror
 
 SRCS_DIR = srcs
-SRCS = $(addprefix $(SRCS_DIR)/, main.c parse.c rendering_setup.c hooks.c draw.c memory.c split.c trim.c utils.c) # to be updated
+SRCS = $(addprefix $(SRCS_DIR)/, main.c parse.c rendering_setup.c hooks.c draw.c memory.c split.c trim.c utils.c)
 
 OBJS_DIR = objs
 OBJS = $(addprefix $(OBJS_DIR)/, $(notdir $(SRCS:.c=.o)))

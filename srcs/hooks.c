@@ -6,7 +6,7 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 12:40:41 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/09 19:37:32 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/09 20:26:08 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,10 @@
 static void	handle_no_axis_features(t_main *main, t_feature var, float value)
 {
 	if (var == ZOOM)
-		main->map->zoom += value;
+	{
+		if (main->map->zoom + value >= 0)
+			main->map->zoom += value;
+	}
 	else if (var == SCALE_Z)
 		main->map->scale_z += value;
 	else if (var == PROJ_TYPE)
