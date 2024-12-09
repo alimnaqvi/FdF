@@ -6,7 +6,7 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:04:17 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/09 12:05:30 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/09 13:41:43 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,12 @@ typedef struct s_color {
 t_map	*init_parse_file(int argc, char **argv, t_list **allocs);
 
 // render
-void	rendering(t_map *map, t_list **allocs);
+void	rendering_start(t_map *map, t_list **allocs);
+void	ft_init_mlx(t_main *main);
+
+// hooks
+void ft_hook(void* param);
+void ft_zoom(double xdelta, double ydelta, void* param);
 
 // draw
 void	draw_map(t_main *main);

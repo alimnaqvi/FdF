@@ -3,15 +3,20 @@ CFLAGS = -g# -fsanitize=address#temp
 #CFLAGS = -Wall -Wextra -Werror
 
 SRCS_DIR = srcs
-SRCS = $(addprefix $(SRCS_DIR)/, main.c parse.c render.c draw.c memory.c split.c trim.c utils.c) # to be updated
+SRCS = $(addprefix $(SRCS_DIR)/, main.c parse.c rendering_setup.c hooks.c draw.c memory.c split.c trim.c utils.c) # to be updated
 
 OBJS_DIR = objs
 OBJS = $(addprefix $(OBJS_DIR)/, $(notdir $(SRCS:.c=.o)))
 
 HEADERS = -I ./includes -I $(LIBFT_DIR)/includes -I $(LIBMLX42_DIR)/include
 
-# linux
-LIBS = $(LIBFT) $(LIBMLX42) -ldl -lglfw -pthread -lm
+UNAME_S	= $(shell uname -s)
+ifeq ($(UNAME_S),Linux)
+	LIBS = $(LIBFT) $(LIBMLX42) -ldl -lglfw -pthread -lm
+endif
+ifeq ($(UNAME_S),Darwin)
+	LIBS = $(LIBFT) $(LIBMLX42) -lglfw -framework Cocoa -framework OpenGL -framework IOKit
+endif
 # macOS (the flag for glfw might be with or without a 3 at the end)
 # LIBS = $(LIBFT) $(LIBMLX42) -lglfw -framework Cocoa -framework OpenGL -framework IOKit
 
