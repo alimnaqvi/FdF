@@ -6,7 +6,7 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 10:41:44 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/09 16:12:50 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/09 16:21:37 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,8 @@ void	rendering_start(t_map *map, t_list **allocs)
 	ft_init_mlx(&main);
 	show_menu(main.mlx);
 	draw_map(&main);
-	mlx_loop_hook(main.mlx, ft_hook, &main);
+	mlx_loop_hook(main.mlx, ft_hook1, &main);
+	mlx_loop_hook(main.mlx, ft_hook2, &main);
 	mlx_scroll_hook(main.mlx, ft_zoom, &main);
 	// mlx_loop_hook(main.mlx, draw_map, &main);
 	mlx_loop(main.mlx);

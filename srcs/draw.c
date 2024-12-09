@@ -6,7 +6,7 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 18:51:53 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/09 15:49:40 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/09 17:11:14 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,7 @@ static t_2d_point project_point(t_3d_point point, t_map *map)
 	temp_z = point.y * sin(map->angle_x) + point.z * cos(map->angle_x);
 	temp_x = point.x * cos(map->angle_y) + temp_z * sin(map->angle_y);
 	temp_z = -point.x * sin(map->angle_y) + temp_z * cos(map->angle_y);
-	if (map->proj_type == ISOMETRIC)
-	{
-		projected.x = (temp_x - temp_y) * cos(map->angle_z) * map->zoom;
-		projected.y = ((temp_x + temp_y) * sin(map->angle_z) - temp_z * map->scale_z) * map->zoom;
-	}
-	else if (map->proj_type == SIDE_VIEW)
+	if (map->proj_type == ISOMETRIC || map->proj_type == SIDE_VIEW)
 	{
 		projected.x = (temp_x - temp_y) * cos(map->angle_z) * map->zoom;
 		projected.y = ((temp_x + temp_y) * sin(map->angle_z) - temp_z * map->scale_z) * map->zoom;
@@ -45,7 +40,6 @@ static t_2d_point project_point(t_3d_point point, t_map *map)
 	return (projected);
 }
 
-// Interpolates between start_color and end_color based on "percentage" (0.0 to 1.0)
 static uint32_t interpolate_color(uint32_t start_color, uint32_t end_color, float percentage)
 {
 	t_color start;

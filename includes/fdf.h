@@ -6,7 +6,7 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:04:17 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/09 14:52:50 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/09 18:39:43 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@
 
 typedef enum e_projection_type {
        ISOMETRIC,
-       SIDE_VIEW,  // Similar to isometric but with unequal angles
-       TOP_DOWN,  // Parallel projection: looking straight down
+       SIDE_VIEW,
+       TOP_DOWN,
    } t_proj_type;
 
 typedef enum e_feature {
@@ -61,7 +61,6 @@ typedef struct s_3d_point {
 	uint32_t bns_color;
 } t_3d_point;
 
-// Store all points in a 2-dimensional array (each inside array is one horizontal line of points)
 typedef struct s_map {
     t_3d_point 	**points;
     uint32_t 	width;
@@ -109,13 +108,14 @@ typedef struct s_color {
 // parse
 t_map	*init_parse_file(int argc, char **argv, t_list **allocs);
 
-// render
+// render setup
 void	rendering_start(t_map *map, t_list **allocs);
 void	ft_init_mlx(t_main *main);
 void	set_map_defaults(t_map *map);
 
 // hooks
-void ft_hook(void* param);
+void ft_hook1(void* param);
+void ft_hook2(void* param);
 void ft_zoom(double xdelta, double ydelta, void* param);
 
 // draw
@@ -124,6 +124,7 @@ void	draw_map(t_main *main);
 // memory
 void	free_check_null(void *ptr);
 void *ft_malloc(size_t size, t_list **allocs);
+char *GNL_record_malloc(int fd, t_list **allocs);
 
 // split
 char	**ft_split_safe(char const *s, char c, t_list **allocs);
@@ -133,5 +134,7 @@ char	*ft_strtrim_safe(char const *s1, char const *set, t_list **allocs);
 
 // utils
 void ft_exit(t_list **allocs, int status);
+uint32_t get_number_of_lines(char *file, t_list **allocs);
+uint32_t	ft_atoi_color(char *str);
 
 #endif

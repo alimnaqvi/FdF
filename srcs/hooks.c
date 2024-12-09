@@ -6,32 +6,16 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 12:40:41 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/09 15:54:09 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/09 17:18:43 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-static void reset_draw_new(t_main *main, t_feature var, char axis, float value)
+static void handle_no_axis_features(t_main *main, t_feature var, float value)
 {
-	if (var == OFFSET)
-	{
-		if (axis == 'x')
-			main->map->x_offset += value;
-		else if (axis == 'y')
-			main->map->y_offset += value;
-	}
-	else if (var == ZOOM)
+	if (var == ZOOM)
 		main->map->zoom += value;
-	else if (var == ANGLE)
-	{
-		if (axis == 'x')
-			main->map->angle_x += value;
-		else if (axis == 'y')
-			main->map->angle_y += value;
-		else if (axis == 'z')
-			main->map->angle_z += value;
-	}
 	else if (var == SCALE_Z)
 		main->map->scale_z += value;
 	else if (var == PROJ_TYPE)
@@ -46,11 +30,33 @@ static void reset_draw_new(t_main *main, t_feature var, char axis, float value)
 		main->map->color_tag = BONUS;
 	else if (var == RESET)
 		set_map_defaults(main->map);
+}
+
+static void reset_draw_new(t_main *main, t_feature var, char axis, float value)
+{
+	if (var == OFFSET)
+	{
+		if (axis == 'x')
+			main->map->x_offset += value;
+		else if (axis == 'y')
+			main->map->y_offset += value;
+	}
+	else if (var == ANGLE)
+	{
+		if (axis == 'x')
+			main->map->angle_x += value;
+		else if (axis == 'y')
+			main->map->angle_y += value;
+		else if (axis == 'z')
+			main->map->angle_z += value;
+	}
+	else
+		handle_no_axis_features(main, var, value);
 	ft_init_mlx(main);
 	draw_map(main);
 }
 
-void ft_hook(void* param)
+void ft_hook1(void* param)
 {
 	t_main *main = (t_main *)param;
 
@@ -68,7 +74,13 @@ void ft_hook(void* param)
 		reset_draw_new(main, OFFSET, 'x', -2);
 	else if (mlx_is_key_down(main->mlx, MLX_KEY_RIGHT))
 		reset_draw_new(main, OFFSET, 'x', 2);
-	else if (mlx_is_key_down(main->mlx, MLX_KEY_A))
+}
+
+void ft_hook2(void* param)
+{
+	t_main *main = (t_main *)param;
+
+	if (mlx_is_key_down(main->mlx, MLX_KEY_A))
 		reset_draw_new(main, ANGLE, 'y', -0.005);
 	else if (mlx_is_key_down(main->mlx, MLX_KEY_D))
 		reset_draw_new(main, ANGLE, 'y', 0.005);

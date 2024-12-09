@@ -40,7 +40,7 @@ $(LIBMLX42): $(LIBMLX42_DIR)
 	git submodule update --init $(LIBMLX42_DIR)
 	cmake $(LIBMLX42_DIR) -B $(LIBMLX42_DIR)/build && make -C $(LIBMLX42_DIR)/build -j4
 
-$(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c $(LIBMLX42) | $(OBJS_DIR)
+$(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c $(LIBMLX42) includes/fdf.h | $(OBJS_DIR)
 	$(CC) $(CFLAGS) $(HEADERS) -c $< -o $@
 
 $(OBJS_DIR):
