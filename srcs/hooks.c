@@ -6,13 +6,13 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 12:40:41 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/09 17:18:43 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/09 19:37:32 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-static void handle_no_axis_features(t_main *main, t_feature var, float value)
+static void	handle_no_axis_features(t_main *main, t_feature var, float value)
 {
 	if (var == ZOOM)
 		main->map->zoom += value;
@@ -32,7 +32,7 @@ static void handle_no_axis_features(t_main *main, t_feature var, float value)
 		set_map_defaults(main->map);
 }
 
-static void reset_draw_new(t_main *main, t_feature var, char axis, float value)
+static void	reset_draw_new(t_main *main, t_feature var, char axis, float value)
 {
 	if (var == OFFSET)
 	{
@@ -56,15 +56,18 @@ static void reset_draw_new(t_main *main, t_feature var, char axis, float value)
 	draw_map(main);
 }
 
-void ft_hook1(void* param)
+void	ft_hook1(void *param)
 {
-	t_main *main = (t_main *)param;
+	t_main	*main;
 
+	main = (t_main *)param;
 	if (mlx_is_key_down(main->mlx, MLX_KEY_ESCAPE))
 		mlx_close_window(main->mlx);
-	else if (mlx_is_key_down(main->mlx, MLX_KEY_LEFT_CONTROL) && mlx_is_key_down(main->mlx, MLX_KEY_UP))
+	else if (mlx_is_key_down(main->mlx, MLX_KEY_LEFT_CONTROL)
+		&& mlx_is_key_down(main->mlx, MLX_KEY_UP))
 		reset_draw_new(main, SCALE_Z, 'z', 0.01);
-	else if (mlx_is_key_down(main->mlx, MLX_KEY_LEFT_CONTROL) && mlx_is_key_down(main->mlx, MLX_KEY_DOWN))
+	else if (mlx_is_key_down(main->mlx, MLX_KEY_LEFT_CONTROL)
+		&& mlx_is_key_down(main->mlx, MLX_KEY_DOWN))
 		reset_draw_new(main, SCALE_Z, 'z', -0.01);
 	else if (mlx_is_key_down(main->mlx, MLX_KEY_UP))
 		reset_draw_new(main, OFFSET, 'y', -2);
@@ -76,10 +79,11 @@ void ft_hook1(void* param)
 		reset_draw_new(main, OFFSET, 'x', 2);
 }
 
-void ft_hook2(void* param)
+void	ft_hook2(void *param)
 {
-	t_main *main = (t_main *)param;
+	t_main	*main;
 
+	main = (t_main *)param;
 	if (mlx_is_key_down(main->mlx, MLX_KEY_A))
 		reset_draw_new(main, ANGLE, 'y', -0.005);
 	else if (mlx_is_key_down(main->mlx, MLX_KEY_D))
@@ -104,10 +108,12 @@ void ft_hook2(void* param)
 		reset_draw_new(main, COLOR, 0, 0);
 }
 
-void ft_zoom(double xdelta, double ydelta, void* param)
+void	ft_zoom(double xdelta, double ydelta, void *param)
 {
-	t_main *main = (t_main *)param;
+	t_main	*main;
 
+	main = (t_main *)param;
+	(void)xdelta;
 	if (ydelta > 0)
 		reset_draw_new(main, ZOOM, 0, 2);
 	else if (ydelta < 0)

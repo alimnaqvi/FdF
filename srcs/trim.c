@@ -6,7 +6,7 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 10:26:20 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/06 10:29:27 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/09 19:39:30 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,3 @@ char	*ft_strtrim_safe(char const *s1, char const *set, t_list **allocs)
 	ft_strlcpy(result, s1 + start, len + 1);
 	return (result);
 }
-

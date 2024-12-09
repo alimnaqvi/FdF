@@ -6,7 +6,7 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 18:37:58 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/09 19:21:37 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/09 19:57:19 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,19 +32,19 @@ static int	open_file(int argc, char **argv)
 
 static uint32_t	get_color(char *str, t_list **allocs)
 {
-	char **splits;
+	char	**splits;
 
 	if (!ft_strchr(str, ','))
 		return (0xFFFFFFFF);
 	splits = ft_split_safe(str, ',', allocs);
 	if (splits && splits[1])
-		return(ft_atoi_color(splits[1]));
-	return(0xFFFFFFFF);
+		return (ft_atoi_color(splits[1]));
+	return (0xFFFFFFFF);
 }
 
-static uint32_t determine_map_width(char **in_points)
+static uint32_t	determine_map_width(char **in_points)
 {
-	uint32_t width;
+	uint32_t	width;
 
 	width = 0;
 	while (in_points[width])
@@ -52,16 +52,18 @@ static uint32_t determine_map_width(char **in_points)
 	return (width);
 }
 
-static void allocate_map_points(uint32_t y, char *line, t_map *map, t_list **allocs)
+static void	allocate_map_points(uint32_t y, char *line, t_map *map,
+		t_list **allocs)
 {
-	uint32_t cur_width;
-	char **in_points;
+	uint32_t	cur_width;
+	char		**in_points;
 	uint32_t	x;
 
 	in_points = ft_split_safe(ft_strtrim_safe(line, "\n", allocs), ' ', allocs);
 	cur_width = determine_map_width(in_points);
 	if (y != 0 && cur_width != map->width)
-		return (ft_putendl_fd("Invalid map. Ensure uniform width.", STDERR_FILENO), ft_exit(allocs, EXIT_FAILURE));
+		return (ft_putendl_fd("Invalid map. Ensure uniform width.",
+				STDERR_FILENO), ft_exit(allocs, EXIT_FAILURE));
 	map->width = cur_width;
 	map->points[y] = ft_malloc(sizeof(t_3d_point) * map->width, allocs);
 	x = 0;
@@ -82,10 +84,10 @@ static void allocate_map_points(uint32_t y, char *line, t_map *map, t_list **all
 
 t_map	*init_parse_file(int argc, char **argv, t_list **allocs)
 {
-	int	fd;
-	uint32_t y;
-	char *line;
-	t_map *map;
+	int			fd;
+	uint32_t	y;
+	char		*line;
+	t_map		*map;
 
 	fd = open_file(argc, argv);
 	map = ft_malloc(sizeof(t_map), allocs);
@@ -94,11 +96,11 @@ t_map	*init_parse_file(int argc, char **argv, t_list **allocs)
 	map->min_z = INT_MAX;
 	map->max_z = INT_MIN;
 	y = 0;
-	line = GNL_record_malloc(fd, allocs);
+	line = gnl_record_malloc(fd, allocs);
 	while (line)
 	{
 		allocate_map_points(y, line, map, allocs);
-		line = GNL_record_malloc(fd, allocs);
+		line = gnl_record_malloc(fd, allocs);
 		y++;
 	}
 	close(fd);

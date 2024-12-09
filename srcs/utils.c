@@ -6,24 +6,24 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 18:36:04 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/09 18:39:33 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/09 19:57:19 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void ft_exit(t_list **allocs, int status)
+void	ft_exit(t_list **allocs, int status)
 {
 	ft_lstclear(allocs, free_check_null);
 	exit(status);
 }
 
-uint32_t get_number_of_lines(char *file, t_list **allocs)
+uint32_t	get_number_of_lines(char *file, t_list **allocs)
 {
-	int fd;
-	uint32_t i;
-	char *line;
-	
+	int			fd;
+	uint32_t	i;
+	char		*line;
+
 	i = 0;
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
@@ -31,11 +31,11 @@ uint32_t get_number_of_lines(char *file, t_list **allocs)
 		perror(file);
 		ft_exit(allocs, EXIT_FAILURE);
 	}
-	line = GNL_record_malloc(fd, allocs);
-	while(line)
+	line = gnl_record_malloc(fd, allocs);
+	while (line)
 	{
 		i++;
-		line = GNL_record_malloc(fd, allocs);
+		line = gnl_record_malloc(fd, allocs);
 	}
 	close(fd);
 	return (i);
@@ -69,19 +69,3 @@ uint32_t	ft_atoi_color(char *str)
 		return (0x000000FF);
 	return ((color << 8) | 0xFF);
 }
-
-// void	free_splits(char ***splits)
-// {
-// 	int	i;
-
-// 	if (!splits || !*splits)
-// 		return ;
-// 	i = 0;
-// 	while ((*splits)[i])
-// 	{
-// 		free((*splits)[i]);
-// 		i++;
-// 	}
-// 	free(*splits);
-// 	*splits = NULL;
-// }

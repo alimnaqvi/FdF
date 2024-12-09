@@ -6,7 +6,7 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 10:41:44 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/09 19:23:56 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/09 19:38:57 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ void	ft_init_mlx(t_main *main)
 	if (!main->mlx)
 		main->mlx = mlx_init(WIDTH, HEIGHT, "FdF", true);
 	if (!(main->mlx))
-		return (ft_putendl_fd((char *)mlx_strerror(mlx_errno), STDERR_FILENO), ft_exit(main->allocs, EXIT_FAILURE));
+		return (ft_putendl_fd((char *)mlx_strerror(mlx_errno), STDERR_FILENO),
+			ft_exit(main->allocs, EXIT_FAILURE));
 	if (main->img)
 	{
 		mlx_delete_image(main->mlx, main->img);
@@ -39,9 +40,9 @@ void	ft_init_mlx(t_main *main)
 	}
 }
 
-void set_map_defaults(t_map *map)
+void	set_map_defaults(t_map *map)
 {
-	uint32_t max_dimension;
+	uint32_t	max_dimension;
 
 	if (map->width > map->height)
 		max_dimension = map->width;
@@ -60,16 +61,17 @@ void set_map_defaults(t_map *map)
 
 static void	show_menu(mlx_t *mlx)
 {
-	int32_t x;
-	int32_t y;
-	
+	int32_t	x;
+	int32_t	y;
+
 	x = 20;
 	y = 20;
 	mlx_put_string(mlx, "ACTION\t\t\t\t\t\t\t\tKEY", x, y);
 	mlx_put_string(mlx, "Color\t\t\t\t\t\t\t\t\tc", x, y += 35);
 	mlx_put_string(mlx, "Zoom\t\t\t\t\t\t\t\t\t\tMouse scroll", x, y += 20);
 	mlx_put_string(mlx, "Move\t\t\t\t\t\t\t\t\t\tArrow keys", x, y += 20);
-	mlx_put_string(mlx, "Scale z\t\t\t\t\t\t\tctrl + up/down arrow key", x, y += 20);
+	mlx_put_string(mlx, "Scale z\t\t\t\t\t\t\tctrl + up/down arrow key", x, y
+		+= 20);
 	mlx_put_string(mlx, "Rotate\t\t\t\t\t\t\t\tw/a/s/d/q/e", x, y += 20);
 	mlx_put_string(mlx, "CHANGE VIEW/PROJECTION:", x, y += 30);
 	mlx_put_string(mlx, "Isometric\t\t\t\t\t1", x, y += 20);
@@ -80,7 +82,7 @@ static void	show_menu(mlx_t *mlx)
 
 void	rendering_start(t_map *map, t_list **allocs)
 {
-	t_main		main;
+	t_main	main;
 
 	main.mlx = NULL;
 	main.img = NULL;
