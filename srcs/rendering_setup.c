@@ -6,7 +6,7 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 10:41:44 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/09 13:48:33 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/09 15:23:39 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,27 +42,23 @@ void	ft_init_mlx(t_main *main)
 	}
 }
 
-static void set_map_defaults(t_map *map)
+void set_map_defaults(t_map *map)
 {
 	uint32_t max_dimension;
 
-	// Determine the maximum dimension of the map
 	if (map->width > map->height)
 		max_dimension = map->width;
 	else
 		max_dimension = map->height;
-	// Compute scale to fit the map within the screen
 	map->zoom = (WIDTH / 2) / (float)max_dimension;
-
-	// Center the map on the screen
 	map->x_offset = WIDTH * 0.4;
 	map->y_offset = HEIGHT * 0.28;
-
 	map->angle_x = PI / 30;
 	map->angle_y = PI / -30;
 	map->angle_z = PI / 6;
 	map->scale_z = 0.2;
 	map->proj_type = ISOMETRIC;
+	map->color_tag = INPUT;
 }
 
 void	rendering_start(t_map *map, t_list **allocs)

@@ -6,7 +6,7 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 12:04:17 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/09 13:41:43 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/09 14:52:50 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <math.h>
 # include <fcntl.h>
 # include <stdio.h>
+# include <limits.h>
 # include "ft_printf.h"
 # include "get_next_line.h"
 # include "libft.h"
@@ -37,7 +38,14 @@ typedef enum e_feature {
 	   ZOOM,
        SCALE_Z,
 	   PROJ_TYPE,
+	   COLOR,
+	   RESET,
    } t_feature;
+
+typedef enum e_color {
+	INPUT,
+	BONUS,
+} t_color_tag;
 
 typedef struct s_2d_point {
     int x;
@@ -49,7 +57,8 @@ typedef struct s_3d_point {
     int x;
     int y;
     int z;
-	uint32_t color;
+	uint32_t in_color;
+	uint32_t bns_color;
 } t_3d_point;
 
 // Store all points in a 2-dimensional array (each inside array is one horizontal line of points)
@@ -57,6 +66,8 @@ typedef struct s_map {
     t_3d_point 	**points;
     uint32_t 	width;
     uint32_t 	height;
+	int			min_z;
+	int			max_z;
 	float		zoom;
 	float		x_offset;
 	float		y_offset;
@@ -65,6 +76,7 @@ typedef struct s_map {
 	float		angle_z;
 	float		scale_z;
 	t_proj_type	proj_type;
+	t_color_tag color_tag;
 } t_map;
 
 typedef struct s_main {
@@ -100,6 +112,7 @@ t_map	*init_parse_file(int argc, char **argv, t_list **allocs);
 // render
 void	rendering_start(t_map *map, t_list **allocs);
 void	ft_init_mlx(t_main *main);
+void	set_map_defaults(t_map *map);
 
 // hooks
 void ft_hook(void* param);

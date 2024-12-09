@@ -6,7 +6,7 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 12:40:41 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/09 14:00:14 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/09 15:34:38 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,14 @@ static void reset_draw_new(t_main *main, t_feature var, char axis, float value)
 	{
 		if (main->map->proj_type == SIDE_VIEW)
 			main->map->angle_z = 0;
+		else if (main->map->proj_type == ISOMETRIC)
+			main->map->angle_z = PI / 6;
 		main->map->proj_type = value;
 	}
+	else if (var == COLOR)
+		main->map->color_tag = BONUS;
+	else if (var == RESET)
+		set_map_defaults(main->map);
 	ft_init_mlx(main);
 	draw_map(main);
 }
@@ -80,6 +86,10 @@ void ft_hook(void* param)
 		reset_draw_new(main, PROJ_TYPE, 0, SIDE_VIEW);
 	else if (mlx_is_key_down(main->mlx, MLX_KEY_3))
 		reset_draw_new(main, PROJ_TYPE, 0, TOP_DOWN);
+	else if (mlx_is_key_down(main->mlx, MLX_KEY_R))
+		reset_draw_new(main, RESET, 0, 0);
+	else if (mlx_is_key_down(main->mlx, MLX_KEY_C))
+		reset_draw_new(main, COLOR, 0, 0);
 }
 
 void ft_zoom(double xdelta, double ydelta, void* param)

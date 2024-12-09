@@ -6,7 +6,7 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 18:37:58 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/07 21:30:15 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/09 14:53:31 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,8 @@ t_map	*init_parse_file(int argc, char **argv, t_list **allocs)
 	map = ft_malloc(sizeof(t_map), allocs);
 	map->height = get_number_of_lines(argv[1], allocs);
 	map->points = ft_malloc(sizeof(t_3d_point *) * map->height, allocs);
+	map->min_z = INT_MAX;
+	map->max_z = INT_MIN;
 	y = 0;
 	line = get_next_line(fd);
 	while (line)
@@ -131,7 +133,11 @@ t_map	*init_parse_file(int argc, char **argv, t_list **allocs)
 			map->points[y][x].x = x;
 			map->points[y][x].y = y;
 			map->points[y][x].z = ft_atoi(*in_points);
-			map->points[y][x].color = get_color(*in_points, allocs);
+			map->points[y][x].in_color = get_color(*in_points, allocs);
+			if (map->points[y][x].z > map->max_z)
+				map->max_z = map->points[y][x].z;
+			if (map->points[y][x].z < map->min_z)
+				map->min_z = map->points[y][x].z;
 			in_points++;
 			x++;
 		}

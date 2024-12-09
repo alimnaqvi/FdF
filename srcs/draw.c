@@ -6,7 +6,7 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 18:51:53 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/09 12:22:31 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/09 15:37:39 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,10 @@ static t_2d_point project_point(t_3d_point point, t_map *map)
 	}
 	projected.x += map->x_offset;
 	projected.y += map->y_offset;
-	projected.color = point.color;
+	if (map->color_tag == INPUT)
+		projected.color = point.in_color;
+	else if (map->color_tag == BONUS)
+		projected.color = point.bns_color;
 	return (projected);
 }
 
@@ -101,14 +104,11 @@ void draw_map(t_main *main)
 		x = 0;
 		while (x < main->map->width)
 		{
+			main->map->points[y][x].bns_color = interpolate_color(0x00A5B4D9, 0xFF4D09D9, (float)abs(main->map->points[y][x].z) / (float)abs(main->map->max_z));
 			if (x + 1 < main->map->width)
-				draw_line(main, 
-					project_point(main->map->points[y][x], main->map),
-					project_point(main->map->points[y][x + 1], main->map));
+				draw_line(main, project_point(main->map->points[y][x], main->map), project_point(main->map->points[y][x + 1], main->map));
 			if (y + 1 < main->map->height)
-				draw_line(main, 
-					project_point(main->map->points[y][x], main->map),
-					project_point(main->map->points[y + 1][x], main->map));
+				draw_line(main, project_point(main->map->points[y][x], main->map), project_point(main->map->points[y + 1][x], main->map));
 			x++;
 		}
 		y++;
