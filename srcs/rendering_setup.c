@@ -6,7 +6,7 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 10:41:44 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/09 15:23:39 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/09 16:12:50 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,26 @@ void set_map_defaults(t_map *map)
 	map->color_tag = INPUT;
 }
 
+static void	show_menu(mlx_t *mlx)
+{
+	int32_t x;
+	int32_t y;
+	
+	x = 20;
+	y = 20;
+	mlx_put_string(mlx, "ACTION\t\t\t\t\t\t\t\tKEY", x, y);
+	mlx_put_string(mlx, "Color\t\t\t\t\t\t\t\t\tc", x, y += 35);
+	mlx_put_string(mlx, "Zoom\t\t\t\t\t\t\t\t\t\tMouse scroll", x, y += 20);
+	mlx_put_string(mlx, "Move\t\t\t\t\t\t\t\t\t\tArrow keys", x, y += 20);
+	mlx_put_string(mlx, "Scale z\t\t\t\t\t\t\tctrl + up/down arrow key", x, y += 20);
+	mlx_put_string(mlx, "Rotate\t\t\t\t\t\t\t\tw/a/s/d/q/e", x, y += 20);
+	mlx_put_string(mlx, "CHANGE VIEW/PROJECTION:", x, y += 30);
+	mlx_put_string(mlx, "Isometric\t\t\t\t\t1", x, y += 20);
+	mlx_put_string(mlx, "Side view\t\t\t\t\t2", x, y += 20);
+	mlx_put_string(mlx, "Top down view\t3", x, y += 20);
+	mlx_put_string(mlx, "Reset\t\t\t\t\t\t\t\t\tr", x, y += 30);
+}
+
 void	rendering_start(t_map *map, t_list **allocs)
 {
 	t_main		main;
@@ -71,6 +91,7 @@ void	rendering_start(t_map *map, t_list **allocs)
 	main.map = map;
 	set_map_defaults(main.map);
 	ft_init_mlx(&main);
+	show_menu(main.mlx);
 	draw_map(&main);
 	mlx_loop_hook(main.mlx, ft_hook, &main);
 	mlx_scroll_hook(main.mlx, ft_zoom, &main);

@@ -6,7 +6,7 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 18:51:53 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/09 15:37:39 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/09 15:49:40 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,8 @@ void draw_map(t_main *main)
 		x = 0;
 		while (x < main->map->width)
 		{
-			main->map->points[y][x].bns_color = interpolate_color(0x00A5B4D9, 0xFF4D09D9, (float)abs(main->map->points[y][x].z) / (float)abs(main->map->max_z));
+			if (abs(main->map->max_z))
+				main->map->points[y][x].bns_color = interpolate_color(0x00A5B4D9, 0xFF4D09D9, (float)abs(main->map->points[y][x].z) / (float)abs(main->map->max_z));
 			if (x + 1 < main->map->width)
 				draw_line(main, project_point(main->map->points[y][x], main->map), project_point(main->map->points[y][x + 1], main->map));
 			if (y + 1 < main->map->height)

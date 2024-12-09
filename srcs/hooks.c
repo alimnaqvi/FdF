@@ -6,7 +6,7 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 12:40:41 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/09 15:34:38 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/09 15:54:09 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static void reset_draw_new(t_main *main, t_feature var, char axis, float value)
 			main->map->angle_z = PI / 6;
 		main->map->proj_type = value;
 	}
-	else if (var == COLOR)
+	else if (var == COLOR && main->map->max_z != main->map->min_z)
 		main->map->color_tag = BONUS;
 	else if (var == RESET)
 		set_map_defaults(main->map);
