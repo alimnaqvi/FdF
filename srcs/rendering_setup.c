@@ -6,7 +6,7 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 10:41:44 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/09 16:21:37 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/09 19:23:56 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,7 @@ void	ft_init_mlx(t_main *main)
 	if (!main->mlx)
 		main->mlx = mlx_init(WIDTH, HEIGHT, "FdF", true);
 	if (!(main->mlx))
-	{
-		ft_putendl_fd(mlx_strerror(mlx_errno), STDERR_FILENO);
-		ft_exit(main->allocs, EXIT_FAILURE);
-	}
+		return (ft_putendl_fd((char *)mlx_strerror(mlx_errno), STDERR_FILENO), ft_exit(main->allocs, EXIT_FAILURE));
 	if (main->img)
 	{
 		mlx_delete_image(main->mlx, main->img);
@@ -30,13 +27,13 @@ void	ft_init_mlx(t_main *main)
 		main->img = mlx_new_image(main->mlx, WIDTH, HEIGHT);
 	if (!(main->img))
 	{
-		ft_putendl_fd(mlx_strerror(mlx_errno), STDERR_FILENO);
+		ft_putendl_fd((char *)mlx_strerror(mlx_errno), STDERR_FILENO);
 		mlx_close_window(main->mlx);
 		ft_exit(main->allocs, EXIT_FAILURE);
 	}
 	if (mlx_image_to_window(main->mlx, main->img, 0, 0) == -1)
 	{
-		ft_putendl_fd(mlx_strerror(mlx_errno), STDERR_FILENO);
+		ft_putendl_fd((char *)mlx_strerror(mlx_errno), STDERR_FILENO);
 		mlx_close_window(main->mlx);
 		ft_exit(main->allocs, EXIT_FAILURE);
 	}
@@ -96,7 +93,6 @@ void	rendering_start(t_map *map, t_list **allocs)
 	mlx_loop_hook(main.mlx, ft_hook1, &main);
 	mlx_loop_hook(main.mlx, ft_hook2, &main);
 	mlx_scroll_hook(main.mlx, ft_zoom, &main);
-	// mlx_loop_hook(main.mlx, draw_map, &main);
 	mlx_loop(main.mlx);
 	mlx_terminate(main.mlx);
 }
