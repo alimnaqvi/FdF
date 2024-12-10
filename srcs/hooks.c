@@ -6,7 +6,7 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 12:40:41 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/09 20:36:17 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/10 13:01:24 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,10 @@ void	ft_hook1(void *param)
 	main = (t_main *)param;
 	if (mlx_is_key_down(main->mlx, MLX_KEY_ESCAPE))
 		mlx_close_window(main->mlx);
-	else if (mlx_is_key_down(main->mlx, MLX_KEY_LEFT_CONTROL)
+	else if (mlx_is_key_down(main->mlx, MLX_KEY_LEFT_SHIFT)
 		&& mlx_is_key_down(main->mlx, MLX_KEY_UP))
 		reset_draw_new(main, SCALE_Z, 'z', 0.01);
-	else if (mlx_is_key_down(main->mlx, MLX_KEY_LEFT_CONTROL)
+	else if (mlx_is_key_down(main->mlx, MLX_KEY_LEFT_SHIFT)
 		&& mlx_is_key_down(main->mlx, MLX_KEY_DOWN))
 		reset_draw_new(main, SCALE_Z, 'z', -0.01);
 	else if (mlx_is_key_down(main->mlx, MLX_KEY_UP))
