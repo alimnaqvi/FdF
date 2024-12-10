@@ -6,7 +6,7 @@
 /*   By: anaqvi <anaqvi@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 10:41:44 by anaqvi            #+#    #+#             */
-/*   Updated: 2024/12/09 19:38:57 by anaqvi           ###   ########.fr       */
+/*   Updated: 2024/12/10 13:04:25 by anaqvi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static void	show_menu(mlx_t *mlx)
 	mlx_put_string(mlx, "Color\t\t\t\t\t\t\t\t\tc", x, y += 35);
 	mlx_put_string(mlx, "Zoom\t\t\t\t\t\t\t\t\t\tMouse scroll", x, y += 20);
 	mlx_put_string(mlx, "Move\t\t\t\t\t\t\t\t\t\tArrow keys", x, y += 20);
-	mlx_put_string(mlx, "Scale z\t\t\t\t\t\t\tctrl + up/down arrow key", x, y
+	mlx_put_string(mlx, "Scale z\t\t\t\t\t\t\tShift + up/down arrow key", x, y
 		+= 20);
 	mlx_put_string(mlx, "Rotate\t\t\t\t\t\t\t\tw/a/s/d/q/e", x, y += 20);
 	mlx_put_string(mlx, "CHANGE VIEW/PROJECTION:", x, y += 30);
@@ -78,6 +78,7 @@ static void	show_menu(mlx_t *mlx)
 	mlx_put_string(mlx, "Side view\t\t\t\t\t2", x, y += 20);
 	mlx_put_string(mlx, "Top down view\t3", x, y += 20);
 	mlx_put_string(mlx, "Reset\t\t\t\t\t\t\t\t\tr", x, y += 30);
+	mlx_put_string(mlx, "Close\t\t\t\t\t\t\t\t\tEscape", x, y += 20);
 }
 
 void	rendering_start(t_map *map, t_list **allocs)
