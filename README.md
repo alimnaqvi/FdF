@@ -1,10 +1,16 @@
 # FdF - Wireframe Renderer
 
 ## Overview
-FdF (Fil de Fer, "wireframe" in French) is a 42 school project introducing the fundamentals of computer graphics. The program renders wireframe models from height maps, creating a 3D visualization on a 2D screen through various projection techniques.
+
+<p>
+  FdF (Fil de Fer, "wireframe" in French) is a 42 school project introducing the fundamentals of computer graphics. The program renders wireframe models from height maps, creating a 3D visualization on a 2D screen through various projection techniques.
+  <img src="https://page-views-counter-534232554413.europe-west1.run.app/view?src=github.com&src_uri=/alimnaqvi/FdF" style="display: none;" />
+</p>
 
 ![FdF Demo](./img/fdf_demo.gif)
+
 ## Features
+
 - Multiple projection modes (isometric, side view, top-down)
 - Interactive 3D model manipulation (rotation, zoom, translation)
 - Z-scaling for altitude emphasis
@@ -12,6 +18,7 @@ FdF (Fil de Fer, "wireframe" in French) is a 42 school project introducing the f
 - Support for custom input colors
 
 ## Installation
+
 The project uses the [MLX42 library](https://github.com/codam-coding-college/MLX42) which is included as a git submodule and automatically initialized by the Makefile.
 
 ```bash
@@ -24,11 +31,13 @@ make
 ```
 
 ## Usage
+
 ```bash
 ./fdf <path to .fdf file>
 ```
 
 ### Map Format
+
 Maps (.fdf files) contain space-separated integers representing a grid of points in 3D space:
 - Position in the line (horizontally) represents the X coordinate
 - Line number (vertically) represents the Y coordinate
@@ -36,6 +45,7 @@ Maps (.fdf files) contain space-separated integers representing a grid of points
 - Optional color can be specified in hexadecimal after a comma (e.g., `10,0xFF0000`)
 
 Example of a simple map file (3x3 grid):
+
 ```
 0  0  0
 0  10 0
@@ -43,6 +53,7 @@ Example of a simple map file (3x3 grid):
 ```
 
 Example with custom colors:
+
 ```
 0,0xFF0000  0,0x00FF00  0,0x0000FF
 0,0xFFFF00  10,0xFF00FF  0,0x00FFFF
@@ -64,7 +75,9 @@ Example with custom colors:
 | Reset to default view      | R                                          |
 
 ## Example Maps
+
 Sample maps are included in the `maps/` directory. Try them out, e.g.:
+
 ```
 ./fdf maps/pyramide.fdf
 ./fdf maps/42.fdf
